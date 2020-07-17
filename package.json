@@ -1,0 +1,26 @@
+{
+  "name": "my_example_nodejs",
+  "version": "1.0.0",
+  "description": "some example with nodejs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quangnguyen90/my_example_nodejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/quangnguyen90/my_example_nodejs/issues"
+  },
+  "homepage": "https://github.com/quangnguyen90/my_example_nodejs#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
