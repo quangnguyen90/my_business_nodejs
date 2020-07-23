@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 
-var router1 = require('./apiRouter.js');
+var accountRouter = require('./routers/account.js');
 const AccountModel = require('./models/account.js');
 
 // parse application/x-www-form-urlencoded
@@ -61,7 +61,7 @@ app.post('/login', (req, res, next) => {
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
-// add api
-app.use('/api/v1', router1);
+// add api of Account
+app.use('/api/account', accountRouter);
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
