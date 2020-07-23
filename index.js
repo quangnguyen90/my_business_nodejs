@@ -41,6 +41,7 @@ app.get('/users', (req, res, next) => {
                 var totalPage = Math.ceil(total / PAGE_SIZE);
 
                 res.json({
+                    total: total,
                     totalPage : totalPage,
                     data: data
                 });

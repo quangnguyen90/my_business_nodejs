@@ -1,5 +1,24 @@
 var currentPage = 1;
 
+$('#paging').pagination({
+    dataSource: '/users?page=1',
+    locator: 'data',
+    totalNumberLocator: function(response) {
+        // you can return totalNumber by analyzing response content
+        return response.total;
+    },
+    pageSize: 2,
+    afterPageOnClick: function (event, pageNumber) {
+        loadPage(pageNumber);
+    },
+    afterPreviousOnClick: function (event, pageNumber) {
+        loadPage(pageNumber);
+    },
+    afterNextOnClick: function (event, pageNumber) {
+        loadPage(pageNumber);
+    }
+})
+
 function loadPage(page) {
     currentPage = page;
     $.ajax({
@@ -12,7 +31,7 @@ function loadPage(page) {
         for(let i = 0; i < records.length; i++) {
             const element = records[i];
             var item = $(`
-                <h1>${element.username} : ${element.password}</h1>
+                <h3>${element.username} : ${element.password}</h3>
             `)
             $('#content').append(item);
         }
@@ -22,6 +41,9 @@ function loadPage(page) {
     })
 }
 
+loadPage(1);
+
+// Unused
 function nextPage() {
     currentPage++;
     $.ajax({
@@ -34,7 +56,7 @@ function nextPage() {
         for(let i = 0; i < records.length; i++) {
             const element = records[i];
             var item = $(`
-                <h1>${element.username} : ${element.password}</h1>
+                <h3>${element.username} : ${element.password}</h3>
             `)
             $('#content').append(item);
         }
@@ -44,6 +66,7 @@ function nextPage() {
     })
 }
 
+// Unused
 function prevPage() {
     currentPage--;
     $.ajax({
@@ -56,7 +79,7 @@ function prevPage() {
         for(let i = 0; i < records.length; i++) {
             const element = records[i];
             var item = $(`
-                <h1>${element.username} : ${element.password}</h1>
+                <h3>${element.username} : ${element.password}</h3>
             `)
             $('#content').append(item);
         }
