@@ -7,7 +7,6 @@ const accountRouter = require('./routers/account.js');
 const authRouter = require('./routers/auth.js');
 const userRouter = require('./routers/user.js');
 
-
 //CORS middleware
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -25,8 +24,6 @@ app.use(bodyParser.json());
 app.use('/public', express.static(path.join(__dirname, 'public')));
 // Config server port
 const port = 3000;
-
-
 
 app.get('/home', (req, res, next) => {
     res.sendFile(path.join(__dirname, 'index.html'))
