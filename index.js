@@ -2,9 +2,11 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const accountRouter = require('./routers/account.js');
 const authRouter = require('./routers/auth.js');
-const AccountModel = require('./models/account.js');
+const userRouter = require('./routers/user.js');
+
 
 //CORS middleware
 app.use(function(req, res, next) {
@@ -15,6 +17,7 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.use(cookieParser());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
@@ -23,53 +26,21 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 // Config server port
 const port = 3000;
 
-// Each item per page
-const PAGE_SIZE = 2;
+
 
 app.get('/home', (req, res, next) => {
     res.sendFile(path.join(__dirname, 'index.html'))
 });
 
+// GET Login page
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'login.html'))
+});
+
 app.get('/', (req, res) => res.send('Hello World!'));
 
-app.get('/users', (req, res, next) => {
-    var page = req.query.page;
-    if (page) {
-        // get page
-        page = parseInt(page);
-        if (page < 1) {
-            page = 1;
-        }
-
-        var skipItems = (page - 1) * PAGE_SIZE;
-        AccountModel.find({})
-        .skip(skipItems)
-        .limit(PAGE_SIZE)
-        .then(data => {
-            AccountModel.countDocuments({}).then((total) => {
-                var totalPage = Math.ceil(total / PAGE_SIZE);
-
-                res.json({
-                    total: total,
-                    totalPage : totalPage,
-                    data: data
-                });
-            })
-        })
-        .catch(err => {
-            res.status(500).json('Server error');
-        })
-
-    } else {
-        AccountModel.find({})
-        .then(data => {
-            res.json(data);
-        })
-        .catch(err => {
-            res.status(500).json('Server error');
-        })
-    }
-});
+// add api of User
+app.use('/api/users', userRouter);
 
 // add api of Account
 app.use('/api/account', accountRouter);
