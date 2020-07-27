@@ -30,6 +30,10 @@ app.get('/index', (req, res, next) => {
     res.sendFile(path.join(__dirname, 'index.html'))
 });
 
+app.get('/demo-cookie', (req, res, next) => {
+    res.sendFile(path.join(__dirname, 'demo-cookie.html'))
+});
+
 app.get('/home', (req, res, next) => {
     var token = req.cookies.token;
     var decodeToken = jwt.verify(token, 'secret_password_here');
