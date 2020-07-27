@@ -5,6 +5,14 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
+const redis = require('redis');
+const redisClient = redis.createClient();
+const redisStore = require('connect-redis')(session);
+// REDIS
+redisClient.on('error', (err) => {
+    console.log('Redis error: ', err);
+});
+
 const accountRouter = require('./routers/account.js');
 const authRouter = require('./routers/auth.js');
 const userRouter = require('./routers/user.js');
@@ -27,7 +35,8 @@ app.use(session({
     cookie: {
         secure: false, // if true: cookie will save sessionID with https & not send sessionID to server
         maxAge: 5000
-    }
+    },
+    store: new redisStore({ host: 'localhost', port: 6379, client: redisClient, ttl: 86400 }),
 }))
 
 app.use(cookieParser());
