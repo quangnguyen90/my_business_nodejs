@@ -3,6 +3,8 @@ const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
+
 const accountRouter = require('./routers/account.js');
 const authRouter = require('./routers/auth.js');
 const userRouter = require('./routers/user.js');
@@ -16,6 +18,17 @@ app.use(function(req, res, next) {
 
     next();
 });
+
+// SESSION middleware
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false, // if true: cookie will save sessionID with https & not send sessionID to server
+        maxAge: 5000
+    }
+}))
 
 app.use(cookieParser());
 // parse application/x-www-form-urlencoded
@@ -32,6 +45,24 @@ app.get('/index', (req, res, next) => {
 
 app.get('/demo-cookie', (req, res, next) => {
     res.sendFile(path.join(__dirname, 'demo-cookie.html'))
+});
+
+app.get('/demo-session', function(req, res, next) {
+    if (req.session.views) {
+        req.session.views++
+        res.setHeader('Content-Type', 'text/html')
+        res.write('<p>views: ' + req.session.views + '</p>')
+        res.write('<p>expires in: ' + (req.session.cookie.maxAge / 1000) + 's</p>')
+        res.end()
+    } else {
+        req.session.views = 1
+        res.end('welcome to the session demo. refresh!')
+    }
+});
+
+app.get('/logout', function(req, res, next) {
+    req.session.destroy();
+    res.json('Logout ok');
 });
 
 app.get('/home', (req, res, next) => {
